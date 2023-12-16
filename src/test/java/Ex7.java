@@ -24,14 +24,14 @@ public class Ex7 {
 
                 URL = location;
                 count = count + 1;
-
             }
             else {
-                URL = "null";
                 responseCode = response.getStatusCode();
+            break;
+//                URL = "null";
             }
         }
-        while (!URL.equals("null"));
+        while (true);
         System.out.println(responseCode);
         System.out.println("Конечный URL:"+ lastURL);
         System.out.println("Количество редиректов: "+ count);
