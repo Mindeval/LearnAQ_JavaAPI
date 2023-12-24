@@ -30,6 +30,5 @@ public class Ex13 {
         assertEquals(platform, getAgent.getString("platform"), "Platform is not equal expected");
         assertEquals(browser, getAgent.getString("browser"), "Browser is not equal expected");
         assertEquals(device, getAgent.getString("device"), "Device is not equal expected");
-      //  System.out.println(agent + " " + respPlatform);
     }
 }
