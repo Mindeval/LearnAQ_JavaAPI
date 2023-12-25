@@ -1,12 +1,15 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lib.Assertions;
 import lib.BaseTestCase;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -14,32 +17,23 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import lib.ApiCoreRequests;
-
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import org.junit.jupiter.api.DisplayName;
-
 @Epic("Authorization cases")  //отчёты allure
 @Feature("Authorization")
-public class UserAuthTest extends BaseTestCase {
+public class UserAuthTestOld extends BaseTestCase {
 
     String cookie;
     String header;
     int userIdOnAuth;
-    private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
-
-
     @BeforeEach
     public void loginUser(){
         Map<String,String> authData = new HashMap<>();
         authData.put("email", "vinkotov@example.com");
         authData.put("password", "1234");
-
-        Response responseGetAuth = apiCoreRequests
-                .makePostRequest("https://playground.learnqa.ru/api/user/login", authData);
-
+        Response responseGetAuth = RestAssured
+                .given()
+                .body(authData)
+                .post("https://playground.learnqa.ru/api/user/login")
+                .andReturn();
         this.cookie = this.getCookie(responseGetAuth, "auth_sid");
         this.header = this.getHeader(responseGetAuth, "x-csrf-token");
         this.userIdOnAuth = this.getIntFromJson(responseGetAuth, "user_id");
@@ -49,12 +43,15 @@ public class UserAuthTest extends BaseTestCase {
     @Description ("This test successfully authorize user by email and password")//описание для отчета Allure
     @DisplayName("Test positive auth user")
     public void testAuthuser(){
-        Response responseCheckAuth = apiCoreRequests
-                .makeGetRequest("https://playground.learnqa.ru/api/user/auth",
-                        this.header,
-                        this.cookie);
-
+        Response responseCheckAuth = RestAssured
+                .given()
+                .header("x-csrf-token", this.header)
+                .cookie("auth_sid", this.cookie)
+                .get("https://playground.learnqa.ru/api/user/auth")
+                .andReturn();
         Assertions.asserJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
+
+
     }
 
     @Description ("This test check authorization status w/o sending auth cookie or token")//описание для отчета Allure
@@ -66,15 +63,15 @@ public class UserAuthTest extends BaseTestCase {
         spec.baseUri("https://playground.learnqa.ru/api/user/auth");
 
         if (condition.equals("cookie")) {
-            Response responseForCheck = apiCoreRequests.makeGetRequestWithCookie("https://playground.learnqa.ru/api/user/auth",
-                    this.cookie);
-            Assertions.asserJsonByName(responseForCheck, "user_id", 0);
+            spec.cookie("auth_sid", this.cookie);
         } else if (condition.equals("headers")) {
-            Response responseForCheck = apiCoreRequests.makeGetRequestWithToken("https://playground.learnqa.ru/api/user/auth",
-                    this.header);
-            Assertions.asserJsonByName(responseForCheck, "user_id", 0);
+            spec.header("x-csrf-token", this.header);
         } else {
-            throw new IllegalArgumentException("Condition value is not known: " + condition);
+            throw new IllegalArgumentException("Condition value is known: " + condition);
         }
+        Response responseForCheck = spec.get().andReturn();
+        Assertions.asserJsonByName(responseForCheck, "user_id", 0);
+
     }
+
 }
