@@ -11,6 +11,11 @@ public class DataGenerator {
         return "leatnqa" + timestamp + "@example.com";
     }
 
+    public static String getIncorrectEmail() {
+        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+        return "leatnqa" + timestamp + "example.com";
+    }
+
     public static Map<String, String> getRegistrationData(){
         Map<String,String> data = new HashMap<>();
         data.put("email", DataGenerator.getRandomEmail());
