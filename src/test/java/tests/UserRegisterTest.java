@@ -41,7 +41,6 @@ public class UserRegisterTest extends BaseTestCase {
 
     @Test
     public void testCreateUserSuccsessfully(){   //Создание пользователя с уникальными данными
-        String email = DataGenerator.getRandomEmail();
         Map<String,String> userData = DataGenerator.getRegistrationData();
 
         Response responseCreateAuth = apiCoreRequests
@@ -55,13 +54,15 @@ public class UserRegisterTest extends BaseTestCase {
     @Description("Testing the rejection of registration with an invalid email")
     @DisplayName("Test negative registration with an invalid email")
     public void testCreateUserIncorrectEmail(){   //Создание пользователя с некорректным email без @
-        String email = DataGenerator.getIncorrectEmail();  //передаем сгенерированный без @ мэйл
-        Map<String,String> userData = DataGenerator.getRegistrationData();
+        Map<String,String> email = new HashMap<>();
+        email.put("email", DataGenerator.getIncorrectEmail());
+        Map<String,String> userData = DataGenerator.getRegistrationData(email); //передаем сгенерированный без @ мэйл
 
         Response responseCreateAuth = apiCoreRequests
                 .makePostRegistrationRequest("https://playground.learnqa.ru/api/user/", userData);
 
         Assertions.assertResponseCodeEquals(responseCreateAuth, 400);
+        Assertions.assertResponseTextEquals(responseCreateAuth, "Invalid email format");
     }
 
     @Description("Testing registration rejection in the absence of required fields")
@@ -69,7 +70,6 @@ public class UserRegisterTest extends BaseTestCase {
     @ParameterizedTest
     @ValueSource(strings = {"username", "firstName", "lastName", "email", "password"})
     public void testCreateUserWithoutRequiredField(String missingField){   //Создание пользователя с незаполненными обязательными полями
-        String email = DataGenerator.getRandomEmail();
         Map<String,String> userData = DataGenerator.getRegistrationData();
         userData.remove(missingField);  //удаляем одно из полей
 
@@ -83,7 +83,6 @@ public class UserRegisterTest extends BaseTestCase {
     @Description("Testing registration with userName length 1 char")
     @DisplayName("Test positive registration with userName length 1 char")
     public void testCreateUserShortName(){   //Создание пользователя с именем в 1 символ
-        String email = DataGenerator.getRandomEmail();
         Map<String,String> userData = DataGenerator.getRegistrationData();
         String str = RandomStringUtils.randomAlphabetic(1);  //генерация строки 1 символ
         userData.replace("firstName", str); // замена имени на сгенерированную строку
@@ -98,7 +97,6 @@ public class UserRegisterTest extends BaseTestCase {
     @Description("Testing registration with userName length 255 char")
     @DisplayName("Test positive registration with userName length 255 char")
     public void testCreateUserLongName(){   //Создание пользователя с именем в 255 символов
-        String email = DataGenerator.getRandomEmail();
         Map<String,String> userData = DataGenerator.getRegistrationData();
         String str = RandomStringUtils.randomAlphabetic(255);  //генерация строки 255 символов
         userData.replace("firstName", str); // замена имени на сгенерированную строку
