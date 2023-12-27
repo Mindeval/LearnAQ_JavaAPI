@@ -223,8 +223,4 @@ public class UserEditTest extends BaseTestCase {
                 .makeGetRequest("https://playground.learnqa.ru/api/user/"+ userID, header, cookie);
         Assertions.asserJsonByName(responseUserData, "firstName", "learnqa");
     }
-
-
-
-
 }
