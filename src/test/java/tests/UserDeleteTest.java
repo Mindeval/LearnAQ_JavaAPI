@@ -1,8 +1,6 @@
 package tests;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
+import io.qameta.allure.*;
 
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -18,6 +16,7 @@ import java.util.Map;
 
 @Epic("User delete cases")
 @Feature("DeleteUser")
+@Story("Delete")
 public class UserDeleteTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
@@ -29,6 +28,10 @@ public class UserDeleteTest extends BaseTestCase {
     @Test
     @Description("test of delete user with id=2")
     @DisplayName("Test positive reject delete user with id=2")
+    @TmsLink ("123")
+    @Link ("www.google.com")
+    @Owner ("Mindeval")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void loginUser(){
         Map<String,String> authData = new HashMap<>();
         authData.put("email", "vinkotov@example.com");
@@ -81,6 +84,7 @@ public class UserDeleteTest extends BaseTestCase {
     @Test
     @Description("test of delete user with auth another user")
     @DisplayName("Test negative delete user with auth another user")
+    @Flaky
     public void testDeleteAnotherUser(){
         //GENERATE USER 1
         Map<String,String> userData1 = DataGenerator.getRegistrationData();

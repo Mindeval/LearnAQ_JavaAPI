@@ -3,6 +3,7 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
@@ -16,6 +17,7 @@ import lib.ApiCoreRequests;
 
 @Epic("User register cases")
 @Feature("Register")
+@Story("GetInfo")
 public class UserGetTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();

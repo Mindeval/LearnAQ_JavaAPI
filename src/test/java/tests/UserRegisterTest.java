@@ -3,6 +3,7 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
@@ -11,6 +12,8 @@ import lib.DataGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import lib.ApiCoreRequests;
@@ -21,6 +24,7 @@ import java.util.Map;
 
 @Epic("User register cases")
 @Feature("Register")
+@Story("Register")
 public class UserRegisterTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();

@@ -3,6 +3,7 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -19,6 +20,7 @@ import lib.ApiCoreRequests;
 
 @Epic("User edit cases")
 @Feature("EditUser")
+@Story("Edit")
 public class UserEditTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
